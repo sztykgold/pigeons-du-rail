@@ -1,5 +1,3 @@
-<h2><span id="Île-de-France"></span><span id=".C3.8Ele-de-France">Île-de-France</span><span class="mw-editsection"><span class="mw-editsection-bracket">[</span><a href="/w/index.php?title=Liste_de_gares_en_France&amp;veaction=edit&amp;section=55" class="mw-editsection-visualeditor" title="Modifier la section : Île-de-France">modifier</a><span class="mw-editsection-divider"> | </span><a href="/w/index.php?title=Liste_de_gares_en_France&amp;action=edit&amp;section=55" title="Modifier la section : Île-de-France">modifier le code</a><span class="mw-editsection-bracket">]</span></span></h2>
-
 INSERT INTO stations(RegionsId, Name) VALUES
 (8, "Auber"),
 (8, "l\'avenue Foch"),

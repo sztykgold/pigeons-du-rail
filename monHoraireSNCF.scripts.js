@@ -204,15 +204,15 @@ function TrainTypeChanged()
 
 function LoadLateForm()
 {
-	window.location.replace('Late.html'); 
+	window.location.replace('Late.php'); 
 }
  
 function LoadFullForm()
 {
-    window.location.replace('Full.html'); 
+    window.location.replace('Full.php'); 
 } 
 
 function LoadDeletedForm()
 {
-    window.location.replace('Deleted.html'); 
+    window.location.replace('Deleted.php'); 
 } 

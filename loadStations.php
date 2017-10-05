@@ -20,14 +20,15 @@ function stations($regionsId)
 	$sql = "SELECT StationsId, Name from stations" . $where;
 	$results = mysqli_query($connection, $sql) or die('Erreur SQL !'.$sql.'<br>'.mysql_error());
 
-	echo "<datalist id=\"stations\" >";
+	//echo "<datalist id=\"stations\" >";
 	
 	foreach($results as $row)
 	{
-		echo "<option value=\"" . $row["Name"] . "\" id=\"" . $row["StationsId"] . "\"/>";
+		echo "<option value=\"" . $row["Name"] . "\" id=\"" . $row["StationsId"] . "\"/>\n";
+		//echo "<option value=\"" . $row["StationsId"] . "\">" . $row["Name"] . "</option>\n";
 	}
 	
-	echo "</datalist><form><input type=\"text\" name=\"trainStop\" list=\"stations\" required></form>";
+	//echo "</datalist><form><input type=\"text\" name=\"trainStop\" list=\"stations\" required></form>";
 	
 }
 

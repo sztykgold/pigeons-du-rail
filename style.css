@@ -1,0 +1,64 @@
+/* Default CSS */
+
+body {
+ background-color: black;
+  
+ font-family: Verdana, sans-serif; 
+ font-size: 100%;
+ }
+ 
+ p,ul,li,td {
+ color: gray; 
+ }
+ 
+td.tooltip{
+    position:relative;
+}
+td.tooltip::before {
+    content: attr(data-tooltip) ;
+    font-size: 12px;
+    position:absolute;
+    z-index: 999;
+    white-space:nowrap;
+    bottom:9999px;
+    left: 0;
+    background:#000;
+    color:#e0e0e0;
+    padding:0px 7px;
+    line-height: 24px;
+    height: 24px;
+    opacity: 0;
+}
+td.tooltip:hover::before {
+    opacity: 1;
+    top:22px;
+}
+td.tooltip:hover::after {
+    content: "";
+    opacity: 1;
+    width: 0; 
+    height: 0; 
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 5px solid black;
+    z-index: 999;
+    position:absolute;
+    white-space:nowrap;
+    top:17px;
+    left: 0px;
+}
+ 
+ input {
+ background-color: LightGray;
+ color: Black;
+ }
+ 
+button, input[type=button], input[type=submit], input[type=reset] {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 8px 32px;
+    text-decoration: none;
+    margin: 4px 2px;
+    cursor: pointer;
+}

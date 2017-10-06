@@ -219,29 +219,6 @@ function get_retards_id($trainsId, $stopsId, $duration, $connection)
 	}
 	return $retardsId;
 }
-/*
-function late($email, $duration, $stop, $train_type, $train_number, $connection)
-{
- 	$pigeonsId = get_pigeons_id($email, $connection);
-	echo "<p>" . "connection du pigeon " . $pigeonsId . "</p>";
-	$trainsId = get_trains_id($train_type, $train_number, "", $connection);
-	echo "<p> " . "declare un retard dans le train " . $trainsId . "</p>";
-	$stopsId = get_arrets_id($stop, $trainsId, $connection);
-	echo "<p> " . " à l'arret " . $stopsId . "</p>";
-	$retardsId = get_retards_id($trainsId, $stopsId, $duration, $connection);	
-	echo "<p> " . " retard Id =  " . $retardsId . "</p>";
-	
-	$sql = "SELECT * FROM pigeons_retard WHERE Date = Date(NOW()) AND PigeonsId = $pigeonsId AND RetardsId = $retardsId;";
-	$result = mysqli_query($connection, $sql);
-	
-	if($result->num_rows == 0)
-	{
-	    $sql = "INSERT INTO pigeons_retard(Date,PigeonsId,RetardsId) VALUES(DATE(NOW()), $pigeonsId, $retardsId);";
-	    mysqli_query($connection, $sql);
-	}
-	
-}
-*/
 
 function late($pigeonsId, $trainsId, $stopsId, $duration, $connection)
 {
@@ -257,12 +234,12 @@ function late($pigeonsId, $trainsId, $stopsId, $duration, $connection)
 	    mysqli_query($connection, $sql);
 	}
 }
-
+/*
 function deleted($email, $duration, $stop, $train_type, $train_number, $connection)
 {
 
 }
-
+*/
 
 
 if(isset($_POST['eventType']))
@@ -305,6 +282,9 @@ switch($eventType)
 {
   case "Late":
 	   late($pigeonsId, $trainsId, $stopsId, (int)$_POST['lateDuration'], $connection); 
+	   break;
+  case "Full":
+       full($pigeonsId, $trainsId, $connection);
 	   break;
 }
 

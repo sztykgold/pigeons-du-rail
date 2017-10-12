@@ -14,6 +14,7 @@
     <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
   </head>
+  
   <body>
   <form name="form" method="post" action="http://127.0.0.1/pigeons-du-rail/userEvent.php">
   <!--<form name="form" method="post" action="http://www.pigeons-du-rail.fr/userEvent.php">-->
@@ -22,7 +23,16 @@
 	<datalist id="station-list">
 	<?php include 'data/StationList.html' ?>
 	</datalist>
-	
+
+<p>
+Signalez uniquement VOTRE retard et uniquement à la gare d'arrivée de VOTRE parcours.
+</p>
+<p>
+Ne signalez PAS le retard à chaque arrêt.
+</p>
+<p>
+Ne signalez PAS d'autres trains que le votre.
+</p>
 	<table>
   <tr>
     <td><label id="labelTrain">Train</label></td>
@@ -32,10 +42,9 @@
 				<option value="TRANSILIEN">Transilien</option>
 		</select>
 	</td>
-  	<td><label id="idTrainLabel">Numéro </label><input type="text" name="trainNumber" id="trainNumber" required/></td>
-	<td class="tooltip" data-tooltip="Heure initialiement prévue à votre gare de d'arrivée (ce champ sert à identifier le train)">
-	    <label id="initialTimeLabel" style="visibility:hidden;">Heure d'arrivée prévue </label>
-		<input type="time" id="initialTime" name="initialTime" style="visibility:hidden;" onLoad="onIntialTimeLoad();"/>
+  	<td>
+		<label id="idTrainLabel">Numéro </label>
+		<input type="text" name="trainNumber" id="trainNumber" required/>
 	</td>
   </tr>		   
   

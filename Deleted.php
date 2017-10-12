@@ -8,7 +8,7 @@
     <meta name="dcterms.created" content="mer., 28 juin 2017 19:12:29 GMT">
     <meta name="description" content="">
     <meta name="keywords" content="">
-    <title>Signaler un train bondé</title>
+    <title>Signaler un train supprimé</title>
     
     <!--[if IE]>
     <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -23,7 +23,7 @@
   <form name="form" method="post" action="http://127.0.0.1/pigeons-du-rail/userEvent.php">
   <!--<form name="form" method="post" action="http://www.pigeons-du-rail.fr/userEvent.php">-->
   
-  <input type="hidden" name="eventType" id="eventType" value="Full" />
+  <input type="hidden" name="eventType" id="eventType" value="Deleted" />
   <table>
   
   <tr>

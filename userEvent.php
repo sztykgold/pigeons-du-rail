@@ -2,9 +2,9 @@
 
 define("TER", 1);
 define("RER", 2);
-define("Transilien", 3);
+define("TRANSILIEN", 3);
 
-$STRINGS = array("UNDEFINED", "TER", "RER", "Transilien");
+$STRINGS = array("UNDEFINED", "TER", "RER", "TRANSILIEN");
 
 $historical_id = store_historical();
 echo "<p>historical_id = " . $historical_id . "</p>";
@@ -65,7 +65,7 @@ function get_pigeons_id($email, $connection)
 	return -1;
 }
 
-function get_trains_id($train_type, $train_number, $train_code, $connection)
+function get_trains_id($train_type, $train_number, $connection)
 {
      switch($train_type)
 	{
@@ -82,14 +82,15 @@ function get_trains_id($train_type, $train_number, $train_code, $connection)
 			    $sql = "INSERT INTO trains(TrainsNumber,TrainsType) VALUES ('$train_number', '" . TER . "');";
 				mysqli_query($connection, $sql);
 				$ret = mysqli_insert_id($connection);
-				store_new_entry_to_check("trains", $ret, -1, "Train type " . $train_type . " code " . $train_code . " number " . $train_number . " created with id " . $ret);
+				store_new_entry_to_check("trains", $ret, -1, "Train type " . $train_type . " number " . $train_number . " created with id " . $ret);
 				return $ret;
 			}
 			return -1;
 			break;
 			
 		case "RER":
-		    $sql = "SELECT TrainsId from trains WHERE TrainsNumber = '$train_number' AND TrainsCode = '$train_code';";
+		    $sql = "SELECT TrainsId from trains WHERE TrainsNumber = '$train_number';";
+			echo "<p>$sql</p>";
 			$result = mysqli_query($connection, $sql) or die('Erreur SQL !'.$sql.'<br>'.mysql_error());
 			if ($result->num_rows == 1)
 	        {
@@ -98,17 +99,18 @@ function get_trains_id($train_type, $train_number, $train_code, $connection)
 			}
 			if ($result->num_rows == 0)
 			{
-			    $sql = "INSERT INTO trains(TrainsNumber, TrainsType, TrainsCode) VALUES ('$train_number', '" . RER . "', '$train_code');";
+			    $sql = "INSERT INTO trains(TrainsNumber, TrainsType) VALUES ('$train_number', '" . RER . "');";
+				echo "<p>$sql</p>";
 				mysqli_query($connection, $sql);
 				$ret = mysqli_insert_id($connection);
-				store_new_entry_to_check("trains", $ret, -1, "Train type " . $train_type . " code " . $train_code . " number " . $train_number . " created with id " . $ret);
+				store_new_entry_to_check("trains", $ret, -1, "Train type " . $train_type . " number " . $train_number . " created with id " . $ret);
 				return $ret;
 			}
 			return -1;
 		    break;
 			
-		case "Transilien":
-		    $sql = "SELECT TrainsId from trains WHERE TrainsNumber = '$train_number' AND TrainsCode = '$train_code';";
+		case "TRANSILIEN":
+		    $sql = "SELECT TrainsId from trains WHERE TrainsNumber = '$train_number';";
 			$result = mysqli_query($connection, $sql) or die('Erreur SQL !'.$sql.'<br>'.mysql_error());
 			if ($result->num_rows == 1)
 	        {
@@ -117,10 +119,10 @@ function get_trains_id($train_type, $train_number, $train_code, $connection)
 			}
 			if ($result->num_rows == 0)
 			{
-			    $sql = "INSERT INTO trains(TrainsNumber, TrainsType, TrainsCode) VALUES ('$train_number', '" . Transilien . "', '$train_code');";
+			    $sql = "INSERT INTO trains(TrainsNumber, TrainsType) VALUES ('$train_number', '" . TRANSILIEN . "');";
 				mysqli_query($connection, $sql);
 				$ret = mysqli_insert_id($connection);
-				store_new_entry_to_check("trains", $ret, -1, "Train type " . $train_type . " code " . $train_code . " number " . $train_number . " created with id " . $ret);
+				store_new_entry_to_check("trains", $ret, -1, "Train type " . $train_type . " number " . $train_number . " created with id " . $ret);
 				return $ret;
 			}
 			return -1;
@@ -129,6 +131,7 @@ function get_trains_id($train_type, $train_number, $train_code, $connection)
 	return -1;
 }
 
+/*
 function get_formatted_name($stop)
 {
     $a_accents = array("à", "ä", "â");
@@ -150,6 +153,7 @@ function get_formatted_name($stop)
 	$ret = strtoupper($ret);
 	return $ret;
 }
+*/
 
 function get_stops_id($stopName, $trainsId, $connection)
 {
@@ -159,20 +163,21 @@ function get_stops_id($stopName, $trainsId, $connection)
 	
 	if($result->num_rows == 0)
 	{
-	   $formatted = get_formatted_name($stopName);
-	   $sql = "SELECT StationsId FROM stations WHERE Name = '$formatted';";
+	   //$formatted = get_formatted_name($stopName);
+	   //$sql = "SELECT StationsId FROM stations WHERE Name = '$formatted';";
+	   $sql = "SELECT StationsId FROM stations WHERE Name = '$stopName';";
 	   $result2 = mysqli_query($connection, $sql);
 	   $stationsId = -1;
 	   
 	   echo "<p>" . $sql . "</p>";
 	   if($result2->num_rows == 0)
 	   {
-	       $sql = "INSERT INTO stations(Name, RegionsId) VALUES ('" . $formatted . "', '-1');";
+	       $sql = "INSERT INTO stations(Name, RegionsId) VALUES ('" . $stopName . "', '-1');";
 		   mysqli_query($connection, $sql);
 		   $stationsId = mysqli_insert_id($connection);
 		   if($stationsId < 1)
 		   		return -1;
-	       store_new_entry_to_check("stations", $stationsId, $trainsId, "new station " . $formatted . " created");
+	       store_new_entry_to_check("stations", $stationsId, $trainsId, "new station " . $stopName . " created");
 	   }
 	   else
 	   {
@@ -182,11 +187,12 @@ function get_stops_id($stopName, $trainsId, $connection)
 		   		return -1;
 	   }
 	   
-	   $sql = "INSERT INTO stops(StationsId, TrainsId) VALUES ('" . $stationsId . "', '" . $trainsId . "');";
+	   $sql = "INSERT INTO stops(StationsId, TrainsId) VALUES (" . $stationsId . ", " . $trainsId . ");";
+	   echo "<p>" . $sql . "</p>";
 	   mysqli_query($connection, $sql);
 	   $stopsId = mysqli_insert_id($connection);
 	   
-	   store_new_entry_to_check("stops", $stopsId, $trainsId, "stop " . $formatted . " (" . $stationsId . ") associated to " . $trainsId);
+	   store_new_entry_to_check("stops", $stopsId, $trainsId, "stop " . $stopName . " (" . $stationsId . ") associated to " . $trainsId);
 	   return $stopsId;	    	
 	}
 	else
@@ -220,8 +226,16 @@ function get_retards_id($trainsId, $stopsId, $duration, $connection)
 	return $retardsId;
 }
 
-function late($pigeonsId, $trainsId, $stopsId, $duration, $connection)
+function late($pigeonsId, $trainsId, $duration, $connection)
 {
+	$stopsId = get_stops_id($_POST['trainStop'], $trainsId, $connection);	
+
+	if($stopsId <= 0)
+	{
+		echo "<p>Erreur interne lors de la creation d'un nouvel arret : " . $_POST['trainStop'] ."</p>";
+		return;
+	}
+	
     $retardsId = get_retards_id($trainsId, $stopsId, $duration, $connection);	
 	echo "<p> " . " retard Id =  " . $retardsId . "</p>";
 	
@@ -234,13 +248,30 @@ function late($pigeonsId, $trainsId, $stopsId, $duration, $connection)
 	    mysqli_query($connection, $sql);
 	}
 }
-/*
-function deleted($email, $duration, $stop, $train_type, $train_number, $connection)
+
+function full($pigeonsId, $trainsId, $connection)
 {
-
+	$sql = "SELECT * FROM pigeons_full_train WHERE Date = Date(NOW()) AND PigeonsId = $pigeonsId AND TrainsId = $trainsId;";
+	$result = mysqli_query($connection, $sql);
+	
+	if($result->num_rows == 0)
+	{
+	    $sql = "INSERT INTO pigeons_full_train(Date,PigeonsId,TrainsId) VALUES(DATE(NOW()), $pigeonsId, $trainsId);";
+	    mysqli_query($connection, $sql);
+	}
 }
-*/
 
+function deleted($pigeonsId, $trainsId, $connection)
+{
+	$sql = "SELECT * FROM pigeons_deleted_train WHERE Date = Date(NOW()) AND PigeonsId = $pigeonsId AND TrainsId = $trainsId;";
+	$result = mysqli_query($connection, $sql);
+	
+	if($result->num_rows == 0)
+	{
+	    $sql = "INSERT INTO pigeons_deleted_train(Date,PigeonsId,TrainsId) VALUES(DATE(NOW()), $pigeonsId, $trainsId);";
+	    mysqli_query($connection, $sql);
+	}
+}
 
 if(isset($_POST['eventType']))
     $eventType=$_POST['eventType'];
@@ -252,15 +283,15 @@ $connection = mysqli_connect('localhost', 'root', 'jhz36ghm', 'les_pigeons_du_ra
 
 $pigeonsId = get_pigeons_id($_POST['userEmail'], $connection);
 
-if($pigeonsId < 0)
+if($pigeonsId <= 0)
 {
     echo "<p>Erreur interne lors de la creation d'un nouvel utilisateur avec l'email " . $_POST['userEmail'] . "</p>";
 	return;
 }
 echo "<p>" . "connection du pigeon " . $pigeonsId . "</p>";
 
-$trainsId = get_trains_id($_POST['trainType'], $_POST['trainNumber'], "", $connection);
-if($trainsId < 0)
+$trainsId = get_trains_id($_POST['trainType'], $_POST['trainNumber'], $connection);
+if($trainsId <= 0)
 {
     echo "<p>Erreur interne lors de la creation d'un nouveau train : " . $_POST['trainType'] . " : " . $_POST['trainNumber'] ."</p>";
 	return;
@@ -268,24 +299,21 @@ if($trainsId < 0)
 
 echo "<p> " . "declare le train " . $trainsId . "</p>";
 
-$stopsId = get_stops_id($_POST['trainStop'], $trainsId, $connection);	
 
-if($stopsId < 0)
-{
-    echo "<p>Erreur interne lors de la creation d'un nouvel arret : " . $_POST['trainStop'] ."</p>";
-	return;
-}	
 
 
 	   
 switch($eventType)
 {
   case "Late":
-	   late($pigeonsId, $trainsId, $stopsId, (int)$_POST['lateDuration'], $connection); 
-	   break;
+		late($pigeonsId, $trainsId, (int)$_POST['lateDuration'], $connection); 
+		break;
   case "Full":
-       full($pigeonsId, $trainsId, $connection);
-	   break;
+		full($pigeonsId, $trainsId, $connection);
+		break;
+  case "Deleted":
+		deleted($pigeonsId, $trainsId, $connection);
+		break;
 }
 
 mysqli_close($connection);  // on ferme la connexion 

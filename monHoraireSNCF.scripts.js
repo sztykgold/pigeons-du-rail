@@ -40,7 +40,7 @@ function validateTrainStop()
 	
 	if(! trainStopOk )
 	{
-	    displayMessage("Nom de gare d'arrivée invalide", true);
+	    displayMessage("Nom de gare  " + trainStop + " d'arrivée invalide", true);
 		return false;
 	}
 	return true;
@@ -78,18 +78,7 @@ function validateTrainNumber()
     {
         if(/^([a-zA-Z]{4})$/.test(trainNumber))
         {
-		    var initialTime = document.form.initialTime.value;
-
-		    // regular expression to match required time format
-            re = /^\d{1,2}:\d{2}([ap]m)?$/;
-
-            if(initialTime == '' || !initialTime.match(re)) 
-			{
-                displayMessage(
-				     "vous devez préciser l'heure d'arrivée prévue pour pouvoir identifier le " 
-					 + trainType, true);
-                return false;
-            }
+			document.form.trainNumber.value = trainNumber.toUpperCase();			
         }
         else
         {
@@ -136,44 +125,60 @@ function validateForm(form)
 				
 	if( type == 'Late' )
 	{
-	    //train stop validation
-		if( !validateTrainStop() )
-			return;	
-	
 		//nb minutes validation
 		if( !validateLateDuration() )
 	    	 return;
 	}
 	if( type == 'Deleted' )
 	{
-	    if( !validateTrainStartStop() )
-		{
-		    return;
-		}
 	}
-	send(form);
+	if( type == 'Full' )
+	{
+	}
+	send(form, type);
 }
 
 document.getElementById("submitButton").addEventListener("onClick", validateForm);
 
-function send(form)
-{		 
-		 var trainType = document.form.trainType.value
-		 var trainNumber = document.form.trainNumber.value;
-		 var userEmail = document.form.userEmail.value;
-		 var lateDuration = document.form.lateDuration.value;
-		 var trainStop = document.form.trainStop.value;
-		 var initialTime = document.form.initialTime.value;
+function send(form, type)
+{		
+		if(type == "Late")
+		{
+			 var trainType = document.form.trainType.value
+			 var trainNumber = document.form.trainNumber.value;
+			 var userEmail = document.form.userEmail.value;
+			 var lateDuration = document.form.lateDuration.value;
+			 var trainStop = document.form.trainStop.value;
 
-		 var msg = "Vous (" + userEmail + ") etes arrivé avec : " + lateDuration 
-		 + " minutes de retard en gare de " + trainStop + " sur le " + trainType + " " + trainNumber; 
-	
-		 displayMessage(msg, false);
-		 
+			 var msg = "Vous (" + userEmail + ") etes arrivé avec : " + lateDuration 
+			 + " minutes de retard en gare de " + trainStop + " sur le " + trainType + " " + trainNumber; 
+		
+			 displayMessage(msg, false);
+		}
+		if(type == "Full")
+		{
+			 var trainType = document.form.trainType.value
+			 var trainNumber = document.form.trainNumber.value;
+			 var userEmail = document.form.userEmail.value;
+
+			 var msg = "Vous (" + userEmail + ") déclarez que le " + trainType + " " + trainNumber + " a été bondé."; 
+		
+			 displayMessage(msg, false);
+		}
+		if(type == "Deleted")
+		{
+			 var trainType = document.form.trainType.value
+			 var trainNumber = document.form.trainNumber.value;
+			 var userEmail = document.form.userEmail.value;
+
+			 var msg = "Vous (" + userEmail + ") déclarez que le " + trainType + " " + trainNumber + " a été supprimé."; 
+		
+			 displayMessage(msg, false);
+		}
 		 var hiddenField = document.createElement("input");
          hiddenField.setAttribute("type", "hidden");
          hiddenField.setAttribute("name", "eventType");
-         hiddenField.setAttribute("value", "Late");
+         hiddenField.setAttribute("value", type);
   
   		 document.form.appendChild(hiddenField);
 		 document.form.submit();
@@ -185,20 +190,14 @@ function TrainTypeChanged()
  	if(document.getElementById('trainType').value == 'TER')
 	{
 	 	document.getElementById('idTrainLabel').innerHTML = 'Numéro ';
-		document.getElementById('initialTimeLabel').style.visibility = 'hidden';
-		document.getElementById('initialTime').style.visibility = 'hidden';
 	}
     if(document.getElementById('trainType').value == 'RER')
 	{
 	 	document.getElementById('idTrainLabel').innerHTML = 'Code 4 lettres ';
-		document.getElementById('initialTimeLabel').style.visibility = 'visible';
-		document.getElementById('initialTime').style.visibility = 'visible';
 	}
 	if(document.getElementById('trainType').value == 'TRANSILIEN')
 	{
 	 	document.getElementById('idTrainLabel').innerHTML = 'Code 4 lettres ';
-		document.getElementById('initialTimeLabel').style.visibility = 'visible';
-		document.getElementById('initialTime').style.visibility = 'visible';
 	}
 }
 
